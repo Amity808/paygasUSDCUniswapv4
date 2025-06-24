@@ -174,7 +174,7 @@ contract InteractCirclePaymaster is Script {
         console.log("Final User USDC:", userUsdcFinal);
         console.log("Final Integration USDC:", integrationUsdcFinal);
         console.log("Final User Gas Deposit:", userGasDepositFinal);
-        console.log("Total USDC spent:", userUsdcBefore - userUsdcFinal);
+        // console.log("Total USDC spent:", userUsdcBefore - userUsdcFinal);
 
         vm.stopBroadcast();
 

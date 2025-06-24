@@ -100,8 +100,8 @@ contract RealUSDCDeduction is Script {
         console.log("Result: No USDC deducted (cost was 0)");
 
         // Check user gas deposit
-        uint256 userGasDeposit = integration.getUserGasDeposit(USER);
-        console.log("User gas deposit:", userGasDeposit);
+        // uint256 userGasDeposit = integration.getUserGasDeposit(USER);
+        // console.log("User gas deposit:", userGasDeposit);
 
         vm.stopBroadcast();
         

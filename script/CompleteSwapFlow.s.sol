@@ -131,12 +131,7 @@ contract CompleteSwapFlow is Script {
         vm.stopBroadcast();
 
         console.log("\n=== DEMONSTRATION RESULTS ===");
-        console.log("✅ Gasless swap flow: SUCCESSFUL");
-        console.log("✅ USDC gas payment: WORKING");
-        console.log("✅ No ETH required: CONFIRMED");
-        console.log("✅ User experience: SEAMLESS");
-        console.log("✅ Cost efficiency: OPTIMAL");
-
+       
         console.log("\n=== KEY BENEFITS ACHIEVED ===");
         console.log("1. No ETH required for gas fees");
         console.log("2. Gas paid in USDC (stablecoin)");

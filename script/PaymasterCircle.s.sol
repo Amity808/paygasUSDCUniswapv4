@@ -100,7 +100,7 @@ contract DeployCirclePaymaster is Script {
             0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238
         );
         if (poolManager != address(0)) {
-            console.log("Hook Address:", deployedHook);
+            console.log("Hook Address:");
         } else {
             console.log("Hook: Not deployed (PoolManager not available)");
         }

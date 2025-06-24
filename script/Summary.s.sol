@@ -125,7 +125,7 @@ contract Summary is Script {
         console.log("Final User USDC:", finalUserUsdc);
         console.log("Final User ETH:", finalUserEth);
         console.log("Final Integration USDC:", finalIntegrationUsdc);
-        console.log("Total USDC spent:", userUsdc - finalUserUsdc);
+        // console.log("Total USDC spent:", userUsdc - finalUserUsdc);
         console.log("Total ETH spent:", userEth - finalUserEth);
 
         vm.stopBroadcast();
