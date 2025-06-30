@@ -17,7 +17,7 @@ CirclePaymasterHook is a Uniswap V4 hook that integrates with Circle's ERC-4337 
 
 The project consists of three main contracts:
 
-1. **CirclePaymasterHook** (`CirclePaymasterHook.sol`)
+1. **CirclePaymasterHook** (`Hook.sol`)
    - A Uniswap V4 hook that intercepts `beforeSwap` and `afterSwap` to manage gas payments in USDC.
    - Interacts with the Circle Paymaster Integration contract to process and finalize gas payments.
    - Tracks gas context per swap to ensure accurate accounting and refunds.
@@ -78,8 +78,8 @@ The project consists of three main contracts:
 ### Deployment
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-team/circle-paymaster-hook.git
-   cd circle-paymaster-hook
+   git clone https://github.com/Amity808/paygasUSDCUniswapv4
+   cd paygasUSDCUniswapv4
    ```
 
 # Contract Deployment and Management Guide
