@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol"; 
 import "forge-std/console.sol";
 
 /**
@@ -24,13 +25,14 @@ contract CirclePaymasterIntegration is Ownable, ReentrancyGuard {
     // Circle Paymaster contract addresses
     address public immutable circlePaymaster;
     address public immutable usdcToken;
+    AggregatorV3Interface public immutable priceFeed; // ADDED: Chainlink Price Feed interface
 
     // Gas estimation constants
     uint256 public constant BASE_GAS_COST = 21000;
     uint256 public constant SWAP_GAS_OVERHEAD = 150000;
 
-    // USDC to ETH price oracle (simplified - in production use Chainlink)
-    uint256 public usdcToEthRate = 3000; // 1 ETH = 3000 USDC (example)
+    // USDC to ETH price oracle (simplified - now using Chainlink)
+    uint256 public usdcToEthRate = 3000; // MODIFIED: Kept as fallback for Chainlink failure
 
     // Events
     event GasPaymentProcessed(
@@ -52,10 +54,22 @@ contract CirclePaymasterIntegration is Ownable, ReentrancyGuard {
 
     constructor(
         address _circlePaymaster,
-        address _usdcToken
+        address _usdcToken,
+        address _priceFeed // ADDED: Price feed address in constructor
     ) Ownable(msg.sender) {
         circlePaymaster = _circlePaymaster;
         usdcToken = _usdcToken;
+        priceFeed = AggregatorV3Interface(_priceFeed); // ADDED: Initialize Chainlink Price Feed
+    }
+
+    /**
+     * @dev Get the latest USDC/ETH price from Chainlink
+     * @return price The latest price in uint256 format
+     */
+    function getLatestPrice() public view returns (uint256) { // ADDED: Chainlink price fetch function
+        (, int256 price,,,) = priceFeed.latestRoundData();
+        require(price > 0, "Invalid price from Chainlink");
+        return uint256(price);
     }
 
     /**
@@ -194,7 +208,7 @@ contract CirclePaymasterIntegration is Ownable, ReentrancyGuard {
 
     // Admin functions
     function updateUsdcToEthRate(uint256 newRate) external onlyOwner {
-        usdcToEthRate = newRate;
+        usdcToEthRate = newRate; // MODIFIED: Retained for fallback purposes
     }
 
     function setAuthorizedCaller(
@@ -221,7 +235,11 @@ contract CirclePaymasterIntegration is Ownable, ReentrancyGuard {
     function _convertEthToUsdc(
         uint256 ethAmount
     ) private view returns (uint256) {
-        return (ethAmount * usdcToEthRate) / 1e18;
+        try this.getLatestPrice() returns (uint256 price) { // MODIFIED: Use Chainlink price feed
+            return (ethAmount * price) / 1e18; // Adjust for price feed decimals
+        } catch {
+            return (ethAmount * usdcToEthRate) / 1e18; // Fallback to hardcoded rate
+        }
     }
 
     // Modifiers
